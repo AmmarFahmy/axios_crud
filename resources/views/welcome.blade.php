@@ -45,8 +45,9 @@
                     <div class="form-group">
                         <input type="text" class="form-control" id="name" placeholder="Name">
                     </div>
-                    <div class="form-group">
-                        <button class="btn btn-sm btn-block btn-success"></button>
+                    <br>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary">Add New Category</button>
                     </div>
                 </form>
             </div>
@@ -58,10 +59,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 
-    {{-- <script>
-        Swal.fire('Any fool can use a computer')
-    </script> --}}
+
 
 </body>
 

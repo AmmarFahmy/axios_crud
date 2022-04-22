@@ -41,13 +41,13 @@
             </div>
             <div class="col-4">
                 <h4>Add New Category</h4>
-                <form action="">
+                <form action="" id="addNewDataForm">
                     <div class="form-group">
                         <input type="text" class="form-control" id="name" placeholder="Name">
                     </div>
                     <br>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary">Add New Category</button>
+                        <button class="btn btn-success btn-sm">Add New Category</button>
                     </div>
                 </form>
             </div>
@@ -61,7 +61,15 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"></script>
 
+    <script>
+        //store 
+        $('#addNewDataForm').on('submit', function(e) {
+            e.preventDefault();
+            console.log('OK');
+        });
+    </script>
 
 
 </body>

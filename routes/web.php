@@ -20,3 +20,5 @@ Route::get('/', function () {
 
 
 Route::resource('category', CategoryController::class);
+
+Route::get('get-all-cat', [CategoryController::class, 'getAllCat'])->name('get-all-cat');

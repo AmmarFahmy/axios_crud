@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoryRequest;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -22,6 +23,12 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function getAllCat()
+    {
+        return Category::latest()->get();
+    }
+
     public function create()
     {
         //
@@ -36,12 +43,17 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
         // return $request->name;
-        return $data = $request->validated();
-        $cat = new Category();
-        $cat->name = $data;
-        if($cat->save()){
-            return 'Success';
-        }
+        // return $data = $request->validated();
+        // $cat = new Category();
+        // $cat->name = $data;
+        // if($cat->save()){
+        //     return 'Success';
+        // }
+
+        //the below code will do the same as above
+        $data = $request->validated();
+        $result = Category::create($data);
+        return $result;
     }
 
     /**
@@ -86,6 +98,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Category::find($id)->delete();
+        return 'OK';
     }
 }

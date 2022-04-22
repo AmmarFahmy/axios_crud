@@ -22,20 +22,12 @@
                 <h4>Manage Category</h4>
                 <table class="table table-bordered">
                     <tr>
-                        <th>Sl</th>
+                        <th>ID</th>
                         <th>Name</th>
                         <th>Actions</th>
                     </tr>
-                    <tbody>
-                        <tr>
-                            <td>Sl</td>
-                            <td>Name</td>
-                            <td>
-                                <button class="btn btn-sm btn-primary">Edit</button>
-                                <button class="btn btn-sm btn-secondary">View</button>
-                                <button class="btn btn-sm btn-danger">Delete</button>
-                            </td>
-                        </tr>
+                    <tbody id="tbody">
+
                     </tbody>
                 </table>
             </div>
@@ -48,9 +40,35 @@
                     </div>
                     <br>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-success btn-sm">Add New Category</button>
+                        <button class="btn btn-success btn-lg">Add New Category</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" id="editRow" class="btn btn-primary" data-toggle="modal" data-target="#editModal">
+        Launch demo modal
+    </button>
+    <a class="btn btn-primary" id="editRow" data-toggle="model" data-target="#editModal">Edit</a>
+
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
         </div>
     </div>
@@ -65,6 +83,43 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"></script>
 
     <script>
+        let url = window.location.origin
+
+        function table_data_row(data) {
+            var rows = '';
+
+            $.each(data, function(key, value) {
+                value.id
+                rows += '<tr>';
+                rows += '<td>' + (key + 1) + '</td>';
+                rows += '<td>' + value.name + '</td>';
+                rows += '<td data-id="' + value.id + '" class="text-center">';
+                rows += '<button type="button" class="btn btn-primary" id="editRow" data-id="' + value.id +
+                    '" data-toggle="model" data-target="#editModal">Edit</button>';
+                rows += '<a class="btn btn-sm btn-danger text-light m-1" id="deleteRow" data-id="' + value.id +
+                    '">Delete</a>';
+                rows += '<a class="btn btn-sm btn-success text-light mx-1" id="viewRow" data-id="' + value.id +
+                    '">View</a>';
+                rows += '</td>';
+                rows += '</tr>';
+            });
+            $("#tbody").html(rows);
+        }
+
+
+        function getAllData() {
+            axios.get("{{ route('get-all-cat') }}")
+                .then(function(res) {
+                    table_data_row(res.data);
+                    // console.log(res.data);
+                })
+        }
+        getAllData();
+
+        function formReset() {
+            $('#addNewDataForm').trigger('reset');
+        }
+
         //store 
         $('#addNewDataForm').on('submit', function(e) {
             e.preventDefault();
@@ -73,17 +128,67 @@
                     name: $('#name').val(),
                 })
                 .then(function(response) {
-                    // console.log(response);
+                    // getAllData();
+                    getAllData();
                     $('name').val('');
                     $('#error').text('');
-                    console.log(response);
+                    Swal.fire('Saved!', '', 'success');
+                    formReset();
                 })
+
                 .catch(function(error) {
                     // console.log(error);
+                    Swal.fire('Name already exist!', '', 'error');
+
                     if (error.response.data.errors.name) {
                         $('#error').text(error.response.data.errors.name[0]);
                     }
                 });
+        });
+
+
+        //delete
+        $('body').on('click', '#deleteRow', function(e) {
+            e.preventDefault();
+            let id = $(this).data('id')
+            // let del = url + '/category/' + id
+            // console.log(del)
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success mx-2',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`${url}/category/${id}`).then(function(r) {
+                        getAllData();
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            'Your data has been deleted.',
+                            'success'
+                        )
+                    });
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your file is safe :)',
+                        'error'
+                    )
+                }
+            })
         });
     </script>
 

@@ -44,6 +44,7 @@
                 <form action="" id="addNewDataForm">
                     <div class="form-group">
                         <input type="text" class="form-control" id="name" placeholder="Name">
+                        <span id="error" class="text-danger"></span>
                     </div>
                     <br>
                     <div class="d-grid gap-2">
@@ -67,7 +68,22 @@
         //store 
         $('#addNewDataForm').on('submit', function(e) {
             e.preventDefault();
-            console.log('OK');
+
+            axios.post("{{ route('category.store') }}", {
+                    name: $('#name').val(),
+                })
+                .then(function(response) {
+                    // console.log(response);
+                    $('name').val('');
+                    $('#error').text('');
+                    console.log(response);
+                })
+                .catch(function(error) {
+                    // console.log(error);
+                    if (error.response.data.errors.name) {
+                        $('#error').text(error.response.data.errors.name[0]);
+                    }
+                });
         });
     </script>
 

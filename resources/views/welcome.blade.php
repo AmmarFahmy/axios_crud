@@ -40,7 +40,7 @@
                     </div>
                     <br>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-success btn-lg">Add New Category</button>
+                        <button class="btn btn-success btn-sm">Add New Category</button>
                     </div>
                 </form>
             </div>
@@ -89,7 +89,7 @@
                 <div class="modal-body">
                     <form id="">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="e_name">
+                            <input type="text" class="form-control" id="v_name" readonly>
                             <input type="hidden" id="e_id">
                         </div>
                     </form>
@@ -139,7 +139,6 @@
         })
 
         $('body').on('click', '#viewRow', function(e) {
-            // alert('1');
             $('#viewModal').modal('show');
         })
 
@@ -190,10 +189,41 @@
 
                 .catch(function(error) {
                     // console.log(error);
-                    Swal.fire('Name already exist!', '', 'error');
+                    // Swal.fire('Empty Field!', '', 'error');
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Duplicated Category'
+                    })
 
                     if (error.response.data.errors.name) {
                         $('#error').text(error.response.data.errors.name[0]);
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'The name field is required'
+                        })
                     }
                 });
         });
@@ -281,7 +311,7 @@
             axios.get(view)
                 .then(function(res) {
                     console.log(res);
-                    $('#e_name').val(res.data.name)
+                    $('#v_name').val(res.data.name)
                     $('#e_id').val(res.data.id)
                 })
         })

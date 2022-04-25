@@ -50,8 +50,8 @@
     <button type="button" id="editRow" class="btn btn-primary" data-toggle="modal" data-target="#editModal">
         Launch demo modal
     </button>
-    <a class="btn btn-primary" id="editRow" data-toggle="model" data-target="#editModal">Edit</a>
 
+    <a id="editRow" class="btn btn-primary" data-toggle="modal" data-target="#editModal">Edit</a>
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -94,17 +94,24 @@
                 rows += '<td>' + (key + 1) + '</td>';
                 rows += '<td>' + value.name + '</td>';
                 rows += '<td data-id="' + value.id + '" class="text-center">';
-                rows += '<button type="button" class="btn btn-primary" id="editRow" data-id="' + value.id +
-                    '" data-toggle="model" data-target="#editModal">Edit</button>';
+                rows += '<a class="btn btn-primary btn-sm" id="editRow" data-id="' + value.id +
+                    '" data-toggle="model" data-target="#editModal">Edit</a>';
+
                 rows += '<a class="btn btn-sm btn-danger text-light m-1" id="deleteRow" data-id="' + value.id +
                     '">Delete</a>';
                 rows += '<a class="btn btn-sm btn-success text-light mx-1" id="viewRow" data-id="' + value.id +
                     '">View</a>';
+
                 rows += '</td>';
                 rows += '</tr>';
             });
             $("#tbody").html(rows);
         }
+
+        $('body').on('click', '#editRow', function(e) {
+            // alert('1');
+            $('#editModal').modal('show');
+        })
 
 
         function getAllData() {

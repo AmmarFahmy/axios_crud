@@ -90,6 +90,7 @@ class CategoryController extends Controller
     {
         $cat = Category::find($id);
         $cat->name = $request->name;
+        $cat->email = $request->email;
         $cat->save();
         return 'OK';
     }

@@ -10,20 +10,60 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    <title>Axios CRUD</title>
+    <title>POS</title>
 </head>
 
 <body>
     <div class="container mt-5">
-        <h1 class="text-center">Axios CRUD</h1>
         <hr>
         <div class="row">
-            <div class="col-8">
-                <h4>Manage Category</h4>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Add New Data
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">New Data Form</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" id="addNewDataForm">
+                                <div class="form-group">
+                                    <div>
+                                        @component('components.forms.inputbox', ['id' => 'name', 'col_size' => 'col-lg-12', 'name' => 'name', 'text' => 'Full Name', 'class' => '', 'placeholder' => 'Full Name', 'required_icon' => true, 'value' => '', 'onkeyup' => '', 'verticle' => false])
+                                        @endcomponent
+                                    </div>
+                                    <div>
+                                        @component('components.forms.inputbox', ['id' => 'email', 'col_size' => 'col-lg-12', 'name' => 'email', 'text' => 'Email', 'class' => '', 'placeholder' => 'Email', 'required_icon' => true, 'value' => '', 'onkeyup' => '', 'verticle' => false])
+                                        @endcomponent
+                                    </div>
+                                    <span id="error" class="text-danger"></span>
+                                </div>
+                                <br>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button class="btn btn-success">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="">
+                <h4>Manage</h4>
                 <table class="table table-bordered">
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
+                        <th>Email</th>
                         <th>Actions</th>
                     </tr>
                     <tbody id="tbody">
@@ -31,22 +71,8 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-4">
-                <h4>Add New Category</h4>
-                <form action="" id="addNewDataForm">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="name" placeholder="Name">
-                        <span id="error" class="text-danger"></span>
-                    </div>
-                    <br>
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-success btn-sm">Add New Category</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
-
 
     {{-- edit --}}
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -63,11 +89,12 @@
                     <form id="editDataForm">
                         <div class="form-group">
                             <input type="text" class="form-control" id="e_name">
+                            <input type="text" class="form-control" id="e_email">
                             <input type="hidden" id="e_id">
                             <span id="error" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-sm btn-block btn-success mt-2" type="submit">Update Category</button>
+                            <button class="btn btn-sm btn-block btn-success mt-2" type="submit">Update Data</button>
                         </div>
                     </form>
                 </div>
@@ -117,6 +144,7 @@
                 rows += '<tr>';
                 rows += '<td>' + (key + 1) + '</td>';
                 rows += '<td>' + value.name + '</td>';
+                rows += '<td>' + value.email + '</td>';
                 rows += '<td data-id="' + value.id + '" class="text-center">';
 
                 rows += '<a class="btn btn-primary btn-sm" id="editRow" data-id="' + value.id +
@@ -124,7 +152,7 @@
                 rows += '<a class="btn btn-sm btn-danger text-light m-1" id="deleteRow" data-id="' + value.id +
                     '">Delete</a>';
                 rows +=
-                    '<a class="btn btn-sm btn-success text-light mx-1" data-toggle="model" data-target="#viewModal" id="viewRow" data-id="' +
+                    '<a class="btn btn-sm btn-success text-light" data-toggle="model" data-target="#viewModal" id="viewRow" data-id="' +
                     value.id + '">View</a>';
 
                 rows += '</td>';
@@ -162,11 +190,13 @@
 
             axios.post("{{ route('category.store') }}", {
                     name: $('#name').val(),
+                    email: $('#email').val(),
                 })
                 .then(function(response) {
                     // getAllData();
                     getAllData();
                     $('name').val('');
+                    $('email').val('');
                     $('#error').text('');
                     // Swal.fire('Saved!', '', 'success');
                     const Toast = Swal.mixin({

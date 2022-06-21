@@ -10,6 +10,11 @@ class Category extends Model
     use HasFactory;
     
     protected $fillable = [
-        'name'
+        'name',
+        'email',
+        // 'phone',
+        // 'address',
+        // 'country',
+        // 'zip'
     ];
 }
